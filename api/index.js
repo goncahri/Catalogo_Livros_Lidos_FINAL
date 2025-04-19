@@ -19,9 +19,21 @@ app.use("/api/livros", livrosRoutes);
 
 app.get("/", (req, res) => res.send("📚 API de Livros"));
 
-connectToDatabase(app).then(() => {
-  app.listen(port, () => {
-    console.log(`🚀 Servidor rodando na porta ${port}`);
-  });
-});
+// Conecta ao banco e inicia o app
+const start = async () => {
+  await connectToDatabase(app);
+
+  // Se o arquivo estiver sendo executado diretamente (ex: node index.js), inicia o servidor
+  if (process.env.NODE_ENV !== "production") {
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+    });
+  }
+};
+
+start();
+
+// Exporta o app para funcionar na Vercel
+export default app;
+
 

@@ -178,6 +178,11 @@
 </div>
 
 <script>
+  const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+  const apiBaseUrl = isLocal 
+    ? "http://localhost:3000/api/livros" 
+    : "https://catalogo-livros-lidos.vercel.app/api/livros";
+
   const tabelaLivros = document.getElementById("tabelaLivros");
   const paginacao = document.getElementById("paginacao");
   const filtroForm = document.getElementById("filtroForm");
@@ -194,7 +199,7 @@
       params.append("order", ordem);
     }
 
-    const res = await fetch(`http://localhost:3000/api/livros?${params}`);
+    const res = await fetch(`${apiBaseUrl}?${params}`);
     const json = await res.json();
     const data = json.data;
 
@@ -204,13 +209,12 @@
         <td>${livro.autor}</td>
         <td>${livro.paginas}</td>
         <td>${livro.avaliacao}</td>
-        <td>${new Date(livro.dataLeitura).toISOString().split("T")[0].split("-").reverse().join("/")}</td>
+        <td>${new Date(livro.dataLeitura).toLocaleDateString("pt-BR")}</td>
         <td>
           <button class="btn btn-sm btn-warning" onclick="editarLivro('${livro._id}')">Editar</button>
           <button class="btn btn-sm btn-danger" onclick="excluirLivro('${livro._id}')">Excluir</button>
         </td>
-      </tr>
-    `).join("");
+      </tr>`).join("");
 
     gerarPaginacao(json.pagination);
   };
@@ -253,13 +257,9 @@
       dataLeitura: dataLeitura.value
     };
 
-    const id = livroId.value;
-    const url = id ? `http://localhost:3000/api/livros/${id}` : `http://localhost:3000/api/livros`;
-    const metodo = id ? "PUT" : "POST";
-
     try {
-      const res = await fetch(url, {
-        method: metodo,
+      const res = await fetch(apiBaseUrl, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(livro)
       });
@@ -271,15 +271,14 @@
           errosValidacao.innerHTML = resposta.erros.map(e => `<div>${e.msg}</div>`).join("");
           errosValidacao.classList.remove("d-none");
         } else {
-          alert("❌ Erro ao salvar livro.");
+          alert("❌ Erro ao cadastrar livro.");
         }
         return;
       }
 
-      alert("✅ Livro salvo com sucesso!");
+      alert("✅ Livro cadastrado com sucesso!");
       bootstrap.Modal.getInstance(document.getElementById("modalLivro")).hide();
       e.target.reset();
-      livroId.value = "";
       fetchLivros();
 
     } catch (error) {
@@ -289,7 +288,7 @@
   });
 
   window.editarLivro = async (id) => {
-    const res = await fetch(`http://localhost:3000/api/livros/${id}`);
+    const res = await fetch(`${apiBaseUrl}/${id}`);
     const livro = await res.json();
     livroId.value = livro._id;
     titulo.value = livro.titulo;
@@ -302,13 +301,14 @@
 
   window.excluirLivro = async (id) => {
     if (confirm("Deseja excluir este livro?")) {
-      await fetch(`http://localhost:3000/api/livros/${id}`, { method: "DELETE" });
+      await fetch(`${apiBaseUrl}/${id}`, { method: "DELETE" });
       fetchLivros();
     }
   };
 
   fetchLivros();
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

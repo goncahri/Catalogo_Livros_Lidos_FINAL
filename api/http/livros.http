@@ -1,0 +1,46 @@
+// Foi efetuado os testes na extensão Thunder Client
+// Teste da API REST de Livros
+
+### GET - Listar todos os livros
+GET http://localhost:3000/api/livros
+Accept: application/json
+
+###
+
+### GET - Buscar livro por ID
+GET http://localhost:3000/api/livros/{{ID_DO_LIVRO}}
+Accept: application/json
+
+###
+
+### POST - Cadastrar novo livro
+POST http://localhost:3000/api/livros
+Content-Type: application/json
+
+{
+  "titulo": "O Programador Pragmático",
+  "autor": "Andrew Hunt",
+  "paginas": 352,
+  "avaliacao": 4.7,
+  "dataLeitura": "2024-08-01"
+}
+
+###
+
+### PUT - Atualizar um livro existente
+PUT http://localhost:3000/api/livros/{{ID_DO_LIVRO}}
+Content-Type: application/json
+
+{
+  "titulo": "O Programador Pragmático (Atualizado)",
+  "autor": "Andrew Hunt",
+  "paginas": 360,
+  "avaliacao": 4.8,
+  "dataLeitura": "2024-08-05"
+}
+
+###
+
+### DELETE - Remover um livro
+DELETE http://localhost:3000/api/livros/{{ID_DO_LIVRO}}
+Accept: application/json

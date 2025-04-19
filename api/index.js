@@ -34,6 +34,9 @@ const start = async () => {
 start();
 
 // Exporta o app para funcionar na Vercel
-export default app;
+export default async function handler(req, res) {
+  await connectToDatabase(app);
+  app(req, res); // <- Isso permite que o Express atenda as requisições na Vercel
+}
 
 

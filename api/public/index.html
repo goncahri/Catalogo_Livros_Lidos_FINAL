@@ -198,7 +198,7 @@
       params.append("order", ordem);
     }
 
-    const res = await fetch(`${baseURL}?${params}`);
+    const res = await fetch(`${baseURL}?${params.toString()}`);
     const json = await res.json();
     const data = json.data;
 

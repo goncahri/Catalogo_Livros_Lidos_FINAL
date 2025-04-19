@@ -17,6 +17,10 @@ app.use('/images', express.static('public/images'));
 // Rotas
 app.use("/api/livros", livrosRoutes);
 
+app.get("/api/teste", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.get("/", (req, res) => res.send("📚 API de Livros"));
 
 // Conecta ao banco e inicia o app localmente (Node)
@@ -28,11 +32,8 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-// Exporta o app adaptado para funcionar na Vercel
-export default async function handler(req, res) {
-  await connectToDatabase(app);
-  return app(req, res);
-}
+export default app;
+
 
 
 

@@ -9,11 +9,17 @@ export async function connectToDatabase(app) {
     await client.connect();
     db = client.db(process.env.DB_NAME);
     app.locals.db = db;
-    console.log('🟢 Conectado ao MongoDB');
+    console.log("🟢 Conectado ao MongoDB");
   } catch (err) {
-    console.error('❌ Erro ao conectar ao MongoDB:', err);
-    process.exit(1);
+    console.error("❌ Erro ao conectar ao MongoDB:", err);
+    throw err; // melhor do que process.exit() em ambiente serverless
   }
 }
 
-export { db };
+// Para quem precisar acessar o db depois de conectado
+export function getDb() {
+  if (!db) {
+    throw new Error("❌ Banco de dados não conectado!");
+  }
+  return db;
+}

@@ -183,9 +183,10 @@
   const filtroForm = document.getElementById("filtroForm");
   const errosValidacao = document.getElementById("errosValidacao");
 
-  const baseURL = window.location.hostname.includes("vercel.app")
-    ? "https://catalogo-livros-lidos.vercel.app/api/livros"
-    : "http://localhost:3000/api/livros";
+  const isLocalhost = window.location.hostname.includes("localhost");
+  const baseURL = isLocalhost
+  ? "http://localhost:3000/api/livros"
+  : "/api/livros";
 
   let paginaAtual = 1;
   const limite = 10;

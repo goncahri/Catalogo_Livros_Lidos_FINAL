@@ -184,9 +184,10 @@
   const errosValidacao = document.getElementById("errosValidacao");
 
   const isLocalhost = window.location.hostname.includes("localhost");
-  const baseURL = isLocalhost
+const baseURL = isLocalhost
   ? "http://localhost:3000/api/livros"
-  : "/api/livros";
+  : "https://back-catalogo-livros-lidos.vercel.app/api/livros";
+
 
   let paginaAtual = 1;
   const limite = 10;

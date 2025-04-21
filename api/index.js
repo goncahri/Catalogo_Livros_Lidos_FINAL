@@ -9,9 +9,22 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+const allowedOrigins = [
+  "https://front-catalogo-livros-lidos.vercel.app",
+  "http://localhost:3000"
+];
+
 app.use(cors({
-  origin: "https://front-catalogo-livros-lidos.vercel.app"
+  origin: (origin, callback) => {
+    // Permite requisições locais ou do frontend no Vercel
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Não permitido por CORS"));
+    }
+  }
 }));
+
 
 app.use(express.json());
 app.use("/images", express.static("public/images"));

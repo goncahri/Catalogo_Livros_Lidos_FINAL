@@ -9,7 +9,10 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors({ origin: "*" }));
+app.use(cors({
+  origin: "https://front-catalogo-livros-lidos.vercel.app"
+}));
+
 app.use(express.json());
 
 // Serve imagens da pasta public/images

@@ -26,7 +26,7 @@ app.get("/api/teste", (req, res) => {
 // Rota raiz
 app.get("/", (req, res) => res.send("📚 API de Livros"));
 
-// Conecta ao banco e inicia o app localmente (em dev) ou exporta para produção
+// Função de inicialização (local)
 const startServer = async () => {
   await connectToDatabase(app);
 
@@ -39,9 +39,10 @@ const startServer = async () => {
 
 startServer();
 
-export default app;
-
-
-
-
-
+// ⚠️ Exporta para funcionar na Vercel (em serverless)
+export default async function handler(req, res) {
+  if (!app.locals.db) {
+    await connectToDatabase(app);
+  }
+  return app(req, res); // Proxy para o Express
+}

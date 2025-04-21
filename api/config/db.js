@@ -1,25 +1,34 @@
 // api/config/db.js
 import { MongoClient } from "mongodb";
 
-let db;
+let db = null;
 
 export async function connectToDatabase(app) {
   try {
-    const client = new MongoClient(process.env.MONGO_URI);
+    const uri = process.env.MONGO_URI;
+    const dbName = process.env.DB_NAME;
+
+    if (!uri || !dbName) {
+      throw new Error("❌ Variáveis de ambiente MONGO_URI e/ou DB_NAME não definidas");
+    }
+
+    const client = new MongoClient(uri);
     await client.connect();
-    db = client.db(process.env.DB_NAME);
+
+    db = client.db(dbName);
     app.locals.db = db;
+
     console.log("🟢 Conectado ao MongoDB");
   } catch (err) {
     console.error("❌ Erro ao conectar ao MongoDB:", err);
-    throw err; // melhor do que process.exit() em ambiente serverless
+    throw err; // nunca use process.exit() no Vercel
   }
 }
 
-// Para quem precisar acessar o db depois de conectado
 export function getDb() {
   if (!db) {
-    throw new Error("❌ Banco de dados não conectado!");
+    throw new Error("❌ Banco de dados ainda não foi conectado.");
   }
   return db;
 }
+

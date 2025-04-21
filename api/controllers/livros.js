@@ -27,19 +27,16 @@ export const getLivros = async (req, res) => {
   const limitInt = parseInt(limit);
   const skip = (pageInt - 1) * limitInt;
 
-  const sortOptions = {};
-  if (sort) {
-    sortOptions[sort] = order === "desc" ? -1 : 1;
-  }
-
   try {
-    const livros = await db.collection("livros")
-      .find(filtro)
-      .sort(sortOptions)
-      .skip(skip)
-      .limit(limitInt)
-      .toArray();
+    const cursor = db.collection("livros").find(filtro);
 
+    if (sort) {
+      const sortOptions = {};
+      sortOptions[sort] = order === "desc" ? -1 : 1;
+      cursor.sort(sortOptions);
+    }
+
+    const livros = await cursor.skip(skip).limit(limitInt).toArray();
     const total = await db.collection("livros").countDocuments(filtro);
 
     res.json({
@@ -60,19 +57,29 @@ export const getLivros = async (req, res) => {
 // GET por ID
 export const getLivroById = async (req, res) => {
   const db = req.app.locals.db;
-  const livro = await db.collection("livros").findOne({ _id: new ObjectId(req.params.id) });
-  res.json(livro);
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: true, message: "ID inválido" });
+  }
+
+  try {
+    const livro = await db.collection("livros").findOne({ _id: new ObjectId(id) });
+    if (!livro) {
+      return res.status(404).json({ error: true, message: "Livro não encontrado" });
+    }
+    res.json(livro);
+  } catch (error) {
+    console.error("Erro ao buscar livro por ID:", error);
+    res.status(500).json({ error: "Erro ao buscar livro por ID" });
+  }
 };
 
 // POST (criar livro)
 export const createLivro = async (req, res) => {
   const db = req.app.locals.db;
-
-  console.log("📥 Dados recebidos:", req.body);
-
   const { titulo, autor, paginas, avaliacao, dataLeitura } = req.body;
 
-  // Validação dos campos obrigatórios
   if (!titulo || !autor || !paginas || !avaliacao || !dataLeitura) {
     return res.status(400).json({ error: true, message: "Todos os campos são obrigatórios." });
   }
@@ -87,7 +94,7 @@ export const createLivro = async (req, res) => {
 
   try {
     const result = await db.collection("livros").insertOne(novoLivro);
-    res.status(201).json(result);
+    res.status(201).json({ _id: result.insertedId, ...novoLivro });
   } catch (error) {
     console.error("❌ Erro ao cadastrar livro:", error);
     res.status(500).json({ error: true, message: "Erro ao cadastrar livro" });
@@ -97,11 +104,16 @@ export const createLivro = async (req, res) => {
 // PUT (atualizar livro)
 export const updateLivro = async (req, res) => {
   const db = req.app.locals.db;
+  const { id } = req.params;
   const { titulo, autor, paginas, avaliacao, dataLeitura } = req.body;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: true, message: "ID inválido" });
+  }
 
   try {
     const result = await db.collection("livros").updateOne(
-      { _id: new ObjectId(req.params.id) },
+      { _id: new ObjectId(id) },
       {
         $set: {
           titulo,
@@ -112,7 +124,12 @@ export const updateLivro = async (req, res) => {
         }
       }
     );
-    res.json(result);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: true, message: "Livro não encontrado" });
+    }
+
+    res.json({ message: "Livro atualizado com sucesso" });
   } catch (error) {
     console.error("❌ Erro ao atualizar livro:", error);
     res.status(500).json({ error: true, message: "Erro ao atualizar livro" });
@@ -122,9 +139,20 @@ export const updateLivro = async (req, res) => {
 // DELETE (remover livro)
 export const deleteLivro = async (req, res) => {
   const db = req.app.locals.db;
+  const { id } = req.params;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ error: true, message: "ID inválido" });
+  }
+
   try {
-    const result = await db.collection("livros").deleteOne({ _id: new ObjectId(req.params.id) });
-    res.json(result);
+    const result = await db.collection("livros").deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ error: true, message: "Livro não encontrado" });
+    }
+
+    res.json({ message: "Livro removido com sucesso" });
   } catch (error) {
     console.error("❌ Erro ao excluir livro:", error);
     res.status(500).json({ error: true, message: "Erro ao excluir livro" });
@@ -149,3 +177,4 @@ export const consultaAvancada = async (req, res) => {
     res.status(500).json({ error: "Erro na consulta avançada" });
   }
 };
+

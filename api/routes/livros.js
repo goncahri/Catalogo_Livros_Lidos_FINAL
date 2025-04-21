@@ -5,20 +5,20 @@ import {
   createLivro,
   updateLivro,
   deleteLivro,
-  consultaAvancada // 👈 novo import
+  consultaAvancada
 } from "../controllers/livros.js";
 
 import { validarLivro, tratarErros } from "../middleware/validation.js";
 
 const router = express.Router();
 
-// Rota com filtros, paginação, ordenação
+// Listagem com filtros, ordenação e paginação
 router.get("/", getLivros);
 
-// Nova rota com operadores avançados
+// Rota de consulta avançada (deve vir antes da rota com ":id")
 router.get("/consulta-avancada", consultaAvancada);
 
-// CRUD
+// CRUD de livros
 router.get("/:id", getLivroById);
 router.post("/", validarLivro, tratarErros, createLivro);
 router.put("/:id", validarLivro, tratarErros, updateLivro);

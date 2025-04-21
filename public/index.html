@@ -200,8 +200,16 @@
     }
 
     const res = await fetch(`${baseURL}?${params.toString()}`);
-    const json = await res.json();
-    const data = json.data;
+
+if (!res.ok) {
+  alert("❌ Erro ao carregar livros.");
+  console.error("Erro ao buscar livros:", res.status, res.statusText);
+  tabelaLivros.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar livros.</td></tr>`;
+  return;
+}
+
+const json = await res.json();
+const data = json.data;
 
     tabelaLivros.innerHTML = data.map(livro => `
       <tr>

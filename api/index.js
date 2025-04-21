@@ -14,18 +14,17 @@ const allowedOrigins = [
   "http://localhost:3000"
 ];
 
-app.use(cors({
+const corsMiddleware = cors({
   origin: (origin, callback) => {
-    // Permite requisições locais ou do frontend no Vercel
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Não permitido por CORS"));
     }
   }
-}));
+});
 
-
+app.use(corsMiddleware);
 app.use(express.json());
 app.use("/images", express.static("public/images"));
 app.use("/api/livros", livrosRoutes);
@@ -36,6 +35,7 @@ app.get("/api/teste", (req, res) => {
 
 app.get("/", (req, res) => res.send("📚 API de Livros"));
 
+// Localhost
 async function startServer() {
   await connectToDatabase(app);
   app.listen(port, () => {
@@ -43,15 +43,16 @@ async function startServer() {
   });
 }
 
-// Só executa localmente
 if (process.env.NODE_ENV !== "production") {
   startServer();
 }
 
-// Exporta para Vercel (serverless)
+// Vercel (serverless)
 export default async function handler(req, res) {
   if (!app.locals.db) {
     await connectToDatabase(app);
   }
-  return app(req, res);
+
+  // Aplica manualmente o CORS no modo serverless
+  return corsMiddleware(req, res, () => app(req, res));
 }

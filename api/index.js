@@ -14,38 +14,31 @@ app.use(cors({
 }));
 
 app.use(express.json());
-
-// Serve imagens da pasta public/images
 app.use("/images", express.static("public/images"));
-
-// Rotas principais
 app.use("/api/livros", livrosRoutes);
 
-// Teste de rota
 app.get("/api/teste", (req, res) => {
   res.json({ status: "ok" });
 });
 
-// Rota raiz
 app.get("/", (req, res) => res.send("📚 API de Livros"));
 
-// Função de inicialização (local)
-const startServer = async () => {
+async function startServer() {
   await connectToDatabase(app);
+  app.listen(port, () => {
+    console.log(`🚀 Servidor rodando na porta ${port}`);
+  });
+}
 
-  if (process.env.NODE_ENV !== "production") {
-    app.listen(port, () => {
-      console.log(`🚀 Servidor rodando na porta ${port}`);
-    });
-  }
-};
+// Só executa localmente
+if (process.env.NODE_ENV !== "production") {
+  startServer();
+}
 
-startServer();
-
-// ⚠️ Exporta para funcionar na Vercel (em serverless)
+// Exporta para Vercel (serverless)
 export default async function handler(req, res) {
   if (!app.locals.db) {
     await connectToDatabase(app);
   }
-  return app(req, res); // Proxy para o Express
+  return app(req, res);
 }

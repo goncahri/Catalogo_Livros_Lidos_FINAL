@@ -69,7 +69,7 @@ PORT=3000
 │   └── index.js          # Entrada principal da API
 ├── public/
 │   └── images/           # Imagens dos livros (caso existam)
-│   └── images/           # Front-end
+│   └── index.html        # Front-end
 ├── vercel.json           # Configuração para deploy (se for hospedar no vercel)
 ├── .env                  # Variáveis de ambiente (.gitignore)
 ├── package.json

@@ -177,4 +177,3 @@ export const consultaAvancada = async (req, res) => {
     res.status(500).json({ error: "Erro na consulta avançada" });
   }
 };
-

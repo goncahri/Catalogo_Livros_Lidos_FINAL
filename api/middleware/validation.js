@@ -33,4 +33,3 @@ export const tratarErros = (req, res, next) => {
   }
   next();
 };
-

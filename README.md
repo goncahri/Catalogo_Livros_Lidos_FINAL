@@ -1,6 +1,6 @@
 # 📚 Catálogo de Livros - API com MongoDB
 
-Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **Node.js**, **Express** e **MongoDB** como base de dados. Permite **cadastrar, editar, excluir e listar livros**, com recursos de **filtro por ano**, **ordenação por avaliação**, **paginação** e destaque de livros.
+Este projeto é uma aplicação web com **API RESTful** para o gerenciamento dos seus livros lidos, você amante da leitura. Desenvolvido com **Node.js**, **Express** e **MongoDB**, o sistema permite **cadastrar**, **listar**, **editar** e **excluir** livros, oferecendo funcionalidades adicionais como **filtros** por título, autor, ano de leitura, ordenação por avaliação e paginação de resultados. Ideal para quem deseja acompanhar suas leituras de forma organizada e visual.
 
 ---
 
@@ -12,6 +12,7 @@ Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **No
 - [🔌 Endpoints da API](#-endpoints-da-api)
 - [📜 Scripts](#-scripts)
 - [💾 Exemplo de livro para cadastro](#-exemplo-de-livro-para-cadastro)
+- [☁️ Deploy no Vercel](#️-deploy-no-vercel)
 - [🖥️ Demo](#️-demo)
 - [🤝 Contribuição](#-contribuição)
 - [📝 Licença](#-licença)
@@ -32,8 +33,9 @@ Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **No
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repo-catalogo-livros.git
-cd seu-repo-catalogo-livros
+git clone https://github.com/goncahri/Catalogo_Livros_Lidos
+cd Catalogo_Livros_Lidos
+
 ```
 
 ### 2. Instale as dependências
@@ -48,6 +50,7 @@ Crie um arquivo `.env` na raiz com o seguinte conteúdo:
 
 ```env
 MONGO_URI=mongodb://localhost:27017/catalogo-livros
+DB_NAME=livrosdb
 PORT=3000
 ```
 
@@ -60,14 +63,15 @@ PORT=3000
 ├── api/
 │   ├── config/           # Conexão com MongoDB
 │   ├── controllers/      # Lógica das requisições (CRUD)
+│   ├── http/             # Requisições REST para teste no VS Code (REST Client / Thunder Client, etc)
 │   ├── middleware/       # Validações com express-validator
 │   ├── routes/           # Rotas da API
 │   └── index.js          # Entrada principal da API
 ├── public/
 │   └── images/           # Imagens dos livros (caso existam)
-├── index.html            # Front-end (opcional)
-├── vercel.json           # Configuração para deploy (opcional)
-├── .env                  # Variáveis de ambiente
+│   └── images/           # Front-end
+├── vercel.json           # Configuração para deploy (se for hospedar no vercel)
+├── .env                  # Variáveis de ambiente (.gitignore)
 ├── package.json
 └── README.md
 ```
@@ -107,13 +111,73 @@ PORT=3000
 }
 ```
 
+## ☁️ Deploy no Vercel
+
+Este projeto está configurado para ser **hospedado no Vercel**, incluindo **front-end (HTML/CSS/JS)** e **back-end (API Node.js + MongoDB)** no mesmo repositório.
+
+### 🛠 Estrutura utilizada
+
+- O **back-end** está localizado na pasta `api/`
+- O **front-end** está na pasta `public/`
+- O arquivo `vercel.json` define o comportamento das rotas
+
+```
+├── api/              # API REST com Node.js e Express
+├── public/           # Interface Web (index.html + JS)
+├── vercel.json       # Arquivo de configuração do Vercel
+```
+
+### 🔁 Arquivo `vercel.json` utilizado
+
+```json
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    }
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "api/swagger/swagger_output.json"
+    }
+  }
+}
+```
+
+> A diretiva `rewrites` garante que as chamadas feitas para `/api/...` no front-end sejam redirecionadas corretamente para a API.
+
+---
+
+### 🌐 Integração com Front-End
+
+No `index.html` (front-end), o `baseURL` das requisições é configurado dinamicamente para funcionar tanto localmente quanto na Vercel:
+
+```js
+const baseURL = window.location.hostname.includes("localhost")
+  ? "http://localhost:3000/api/livros"
+  : "/api/livros";
+```
+
+---
+
+### 🔐 Variáveis de Ambiente no Vercel
+
+No painel da Vercel, adicione em **Settings > Environment Variables**:
+
+| Variável     | Descrição                                   |
+|--------------|----------------------------------------------|
+| `MONGO_URI`  | URI de conexão com MongoDB Atlas             |
+| `DB_NAME`    | Nome do banco de dados (exemplo: `livrosdb`) |
+
 ---
 
 ## 🖥️ Demo
 
 Você pode testar a API online acessando:
 
-[https://seu-link-no-vercel.vercel.app](https://seu-link-no-vercel.vercel.app)  
+[https://front-catalogo-livros-lidos.vercel.app/](https://seu-link-no-vercel.vercel.app)  
 
 ---
 
@@ -133,6 +197,6 @@ MIT
 
 ### Grupo Wi (World Innovation):
 ### *Herivelton Henrique Gonçalves*
-### *Gabriel*
-### *Breno*
-### *Wendel*
+### *Gabriel Ribeiro Correa*
+### *Breno Jose da Silva*
+### *Wendel Augusto Lopes Vasco*

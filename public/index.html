@@ -188,7 +188,6 @@ const baseURL = isLocalhost
   ? "http://localhost:3000/api/livros"
   : "https://back-catalogo-livros-lidos.vercel.app/api/livros";
 
-
   let paginaAtual = 1;
   const limite = 10;
 
@@ -254,47 +253,52 @@ const data = json.data;
   });
 
   document.getElementById("formLivro").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    errosValidacao.classList.add("d-none");
-    errosValidacao.innerHTML = "";
+  e.preventDefault();
+  errosValidacao.classList.add("d-none");
+  errosValidacao.innerHTML = "";
 
-    const livro = {
-      titulo: titulo.value,
-      autor: autor.value,
-      paginas: parseInt(paginas.value),
-      avaliacao: parseFloat(avaliacao.value),
-      dataLeitura: dataLeitura.value
-    };
+  const livro = {
+    titulo: titulo.value,
+    autor: autor.value,
+    paginas: parseInt(paginas.value),
+    avaliacao: parseFloat(avaliacao.value),
+    dataLeitura: dataLeitura.value
+  };
 
-    try {
-      const res = await fetch(baseURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(livro)
-      });
+  const livroId = document.getElementById("livroId").value;
+  const metodo = livroId ? "PUT" : "POST";
+  const url = livroId ? `${baseURL}/${livroId}` : baseURL;
 
-      const resposta = await res.json();
+  try {
+    const res = await fetch(url, {
+      method: metodo,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(livro)
+    });
 
-      if (!res.ok) {
-        if (resposta.erros) {
-          errosValidacao.innerHTML = resposta.erros.map(e => `<div>${e.msg}</div>`).join("");
-          errosValidacao.classList.remove("d-none");
-        } else {
-          alert("❌ Erro ao cadastrar livro.");
-        }
-        return;
+    const resposta = await res.json();
+
+    if (!res.ok) {
+      if (resposta.erros) {
+        errosValidacao.innerHTML = resposta.erros.map(e => `<div>${e.msg}</div>`).join("");
+        errosValidacao.classList.remove("d-none");
+      } else {
+        alert("❌ Erro ao cadastrar/editar livro.");
       }
-
-      alert("✅ Livro cadastrado com sucesso!");
-      bootstrap.Modal.getInstance(document.getElementById("modalLivro")).hide();
-      e.target.reset();
-      fetchLivros();
-
-    } catch (error) {
-      alert("❌ Erro inesperado.");
-      console.error(error);
+      return;
     }
-  });
+
+    alert(livroId ? "✏️ Livro editado com sucesso!" : "✅ Livro cadastrado com sucesso!");
+    bootstrap.Modal.getInstance(document.getElementById("modalLivro")).hide();
+    e.target.reset();
+    document.getElementById("livroId").value = ""; // limpa o campo oculto após edição
+    fetchLivros();
+
+  } catch (error) {
+    alert("❌ Erro inesperado.");
+    console.error(error);
+  }
+});
 
   window.editarLivro = async (id) => {
     const res = await fetch(`${baseURL}/${id}`);

@@ -177,7 +177,7 @@ No painel da Vercel, adicione em **Settings > Environment Variables**:
 
 Você pode testar a API online acessando:
 
-[https://front-catalogo-livros-lidos.vercel.app/](https://seu-link-no-vercel.vercel.app)  
+https://front-catalogo-livros-lidos.vercel.app/ 
 
 ---
 

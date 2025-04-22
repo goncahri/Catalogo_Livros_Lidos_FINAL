@@ -183,7 +183,7 @@
   const filtroForm = document.getElementById("filtroForm");
   const errosValidacao = document.getElementById("errosValidacao");
 
-  const isLocalhost = window.location.hostname.includes("localhost");
+  const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
 const baseURL = isLocalhost
   ? "http://localhost:3000/api/livros"
   : "https://back-catalogo-livros-lidos.vercel.app/api/livros";

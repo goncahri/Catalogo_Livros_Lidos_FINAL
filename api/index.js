@@ -11,7 +11,8 @@ const port = process.env.PORT || 3000;
 
 const allowedOrigins = [
   "https://front-catalogo-livros-lidos.vercel.app",
-  "http://localhost:3000"
+  "http://localhost:3000",
+  "http://127.0.0.1:5500"
 ];
 
 const corsMiddleware = cors({

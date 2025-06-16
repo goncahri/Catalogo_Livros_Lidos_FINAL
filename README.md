@@ -174,12 +174,6 @@ npm install swagger-autogen -D
 http://localhost:3000/api-docs
 ```
 
-Ou no Vercel:
-
-```
-https://seu-projeto.vercel.app/api-docs
-```
-
 ---
 
 ## 💾 Exemplo de livro

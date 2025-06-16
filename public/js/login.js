@@ -1,6 +1,6 @@
-const baseURL = window.location.hostname.includes("front-catalogo-livros-lidos-final.vercel.app")
-  ? "https://catalogo-livros-lidos-final.vercel.app/api"
-  : "http://localhost:3000/api";
+const baseURL = window.location.hostname.includes("localhost")
+  ? "http://localhost:3000/api"
+  : "https://catalogo-livros-lidos-final.vercel.app/api";
 
 document.getElementById("formLogin").addEventListener("submit", async (e) => {
   e.preventDefault();

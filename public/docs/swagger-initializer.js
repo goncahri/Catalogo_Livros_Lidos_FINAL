@@ -1,6 +1,6 @@
 window.onload = function() {
   window.ui = SwaggerUIBundle({
-    url: "swagger.json",
+    url: "./swagger.json",  // sempre ./ (está na mesma pasta do index.html)
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
@@ -13,6 +13,7 @@ window.onload = function() {
     layout: "StandaloneLayout"
   });
 };
+
 
 
 

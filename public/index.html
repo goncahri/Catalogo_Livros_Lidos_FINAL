@@ -445,7 +445,7 @@ campos.titulo.addEventListener("blur", async () => {
     };
 
     const metodo = campos.livroId.value ? "PUT" : "POST";
-    const url = campos.livroId.value ? `${baseURL}/${campos.livroId.value}` : baseURL;
+    const url = campos.livroId.value ? `${baseURL}/livros/${campos.livroId.value}` : `${baseURL}/livros`;
 
     try {
       const res = await fetch(url, {
@@ -500,7 +500,7 @@ const fetchLivros = async (filtros = {}) => {
     params.append("order", ordem);
   }
 
-  const res = await fetch(`${baseURL}?${params.toString()}`, {
+  const res = await fetch(`${baseURL}/livros?${params.toString()}`, {
     headers: authHeaders
   });
   const json = await res.json();
@@ -540,7 +540,7 @@ const fetchLivros = async (filtros = {}) => {
   };
 
   window.editarLivro = async (id) => {
-    const res = await fetch(`${baseURL}/${id}`, { headers: authHeaders });
+    const res = await fetch(`${baseURL}/livros/${id}`, { headers: authHeaders });
     const livro = await res.json();
 
     campos.livroId.value = livro._id;
@@ -556,7 +556,7 @@ const fetchLivros = async (filtros = {}) => {
 
   window.excluirLivro = async (id) => {
     if (confirm("Deseja excluir este livro?")) {
-      await fetch(`${baseURL}/${id}`, {
+      await fetch(`${baseURL}/livros/${id}`, {
         method: "DELETE",
         headers: authHeaders
       });
@@ -568,10 +568,7 @@ const fetchLivros = async (filtros = {}) => {
 
   window.verDetalhesLivro = async (id) => {
     try {
-      const res = await fetch(`${baseURL}/${id}`, {
-        headers: authHeaders
-      });
-
+      const res = await fetch(`${baseURL}/livros/${id}`, { headers: authHeaders });
       const livro = await res.json();
 
       if (!livro.titulo) {
@@ -605,9 +602,7 @@ const fetchLivros = async (filtros = {}) => {
 
   const carregarDestaques = async () => {
     try {
-      const res = await fetch(`${baseURL}/destaques`, {
-        headers: authHeaders
-      });
+      const res = await fetch(`${baseURL}/livros/destaques`, { headers: authHeaders });
 
       const destaques = await res.json();
       if (!Array.isArray(destaques)) throw new Error("Resposta inesperada");
@@ -695,7 +690,7 @@ const atualizarEstatisticas = (livros) => {
 
 const fetchTodosLivros = async () => {
   try {
-    const res = await fetch(`${baseURL}?limit=10000`, { headers: authHeaders });
+    const res = await fetch(`${baseURL}/livros?limit=10000`, { headers: authHeaders });
     const json = await res.json();
     const livros = json.data || json;
     atualizarEstatisticas(livros);

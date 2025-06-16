@@ -1,14 +1,19 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import fs from "fs";
 import swaggerUi from "swagger-ui-express";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const swaggerFile = require("./swagger.json");
 
 import { connectToDatabase } from "./config/db.js";
 import livrosRoutes from "./routes/livros.js";
 import usuariosRoutes from "./routes/usuarios.js";
+
+// Lê o arquivo swagger.json dinamicamente
+const swaggerDocument = JSON.parse(
+  fs.readFileSync("./api/swagger.json", "utf-8")
+);
 
 dotenv.config();
 
@@ -19,16 +24,25 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Swagger UI local
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+// Swagger funcionando local e na Vercel pela rota /api/doc
+app.use(
+  "/api/doc",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customCss: `
+      .swagger-ui .topbar { display: none }
+      .swagger-ui .opblock .opblock-summary-path-description-wrapper {
+        justify-content: center;
+        display: flex;
+      }
+    `
+  })
+);
 
-// Arquivos estáticos
+// Arquivos estáticos (se tiver imagens, etc.)
 app.use("/images", express.static("public/images"));
 
-// Swagger UI estático para produção
-app.use("/docs", express.static("public/docs"));
-
-// Rotas principais
+// Rotas principais da API
 app.use("/api/livros", livrosRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 
@@ -44,7 +58,7 @@ async function startServer() {
   }
 }
 
-// 🚀 Execução local
+// Execução local
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
   startServer().then(() => {
     app.listen(port, () => {
@@ -53,7 +67,7 @@ if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
   });
 }
 
-// ⚙️ Handler para Vercel
+// Handler para Vercel
 export default async function handler(req, res) {
   await startServer();
   return app(req, res);

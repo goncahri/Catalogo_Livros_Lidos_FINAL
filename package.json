@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node api/index.js",
     "start": "node api/index.js",
-    "test": "jest"
+    "test": "jest",
+    "doc": "node swagger.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -15,6 +16,7 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
     "node-fetch": "^3.3.2",

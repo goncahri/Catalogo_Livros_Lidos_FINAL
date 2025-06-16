@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Swagger
-app.use("/api/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Arquivos estáticos
 app.use("/images", express.static("public/images"));

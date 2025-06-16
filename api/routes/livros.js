@@ -5,9 +5,13 @@ import {
   createLivro,
   updateLivro,
   deleteLivro,
+<<<<<<< HEAD
   consultaAvancada,
   buscarLivroGoogle,
   getLivrosDestaque
+=======
+  consultaAvancada
+>>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 } from "../controllers/livros.js";
 
 import { validarLivro, tratarErros } from "../middleware/validation.js";
@@ -15,6 +19,7 @@ import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
+<<<<<<< HEAD
 // Lista livros em destaque
 router.get('/destaques', auth, getLivrosDestaque);
 
@@ -38,5 +43,18 @@ router.put('/:id', auth, validarLivro, tratarErros, updateLivro);
 
 // Remove livro
 router.delete('/:id', auth, deleteLivro);
+=======
+// Listagem com filtros, ordenação e paginação
+router.get("/", getLivros);
+
+// Rota de consulta avançada (deve vir antes da rota com ":id")
+router.get("/consulta-avancada", consultaAvancada);
+
+// CRUD de livros
+router.get("/:id", getLivroById);
+router.post("/", validarLivro, tratarErros, createLivro);
+router.put("/:id", validarLivro, tratarErros, updateLivro);
+router.delete("/:id", deleteLivro);
+>>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 
 export default router;

@@ -270,7 +270,7 @@ No painel da Vercel, adicione em **Settings > Environment Variables**:
 
 Você pode acessar o projeto funcionando em:
 
-[https://seu-projeto.vercel.app](https://seu-projeto.vercel.app)
+[https://catalogo-livros-lidos-final.vercel.app/]
 
 ---
 

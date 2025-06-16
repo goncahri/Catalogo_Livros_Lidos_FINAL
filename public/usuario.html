@@ -124,7 +124,7 @@ const baseURL = window.location.hostname.includes("localhost")
       // Envio para o back-end
       const dadosUsuario = { nome, email, senha };
 
-      fetch(`${urlBase}/usuarios`, {
+      fetch(`${baseURL}/usuarios`, {
         method: 'POST',
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dadosUsuario)

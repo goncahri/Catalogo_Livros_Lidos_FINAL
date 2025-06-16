@@ -25,7 +25,7 @@ export async function connectToDatabase(app) {
     console.log("🟢 Conectado ao MongoDB");
   } catch (err) {
     console.error("❌ Erro ao conectar ao MongoDB:", err);
-    throw err; // nunca use process.exit() no Vercel
+    throw err;
   }
 }
 

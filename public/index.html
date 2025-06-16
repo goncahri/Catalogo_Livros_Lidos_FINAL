@@ -337,16 +337,9 @@
     });
   }
 
-<<<<<<< HEAD:api/public/index.html
   const baseURL = window.location.hostname.includes("vercel.app")
     ? "https://back-catalogo-livros-lidos.vercel.app/api/livros"
     : "http://localhost:3000/api/livros";
-=======
-  const isLocalhost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
-const baseURL = isLocalhost
-  ? "http://localhost:3000/api/livros"
-  : "https://back-catalogo-livros-lidos.vercel.app/api/livros";
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb:public/index.html
 
   const googleBooksURL = baseURL + "/busca/google";
 
@@ -507,25 +500,11 @@ const fetchLivros = async (filtros = {}) => {
     params.append("order", ordem);
   }
 
-<<<<<<< HEAD:api/public/index.html
   const res = await fetch(`${baseURL}?${params.toString()}`, {
     headers: authHeaders
   });
   const json = await res.json();
   const data = json.data;
-=======
-    const res = await fetch(`${baseURL}?${params.toString()}`);
-
-if (!res.ok) {
-  alert("❌ Erro ao carregar livros.");
-  console.error("Erro ao buscar livros:", res.status, res.statusText);
-  tabelaLivros.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Erro ao carregar livros.</td></tr>`;
-  return;
-}
-
-const json = await res.json();
-const data = json.data;
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb:public/index.html
 
   tabelaLivros.innerHTML = data.map(livro => `
     <tr>
@@ -560,68 +539,6 @@ const data = json.data;
     fetchLivros();
   };
 
-<<<<<<< HEAD:api/public/index.html
-=======
-  filtroForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    paginaAtual = 1;
-    fetchLivros({
-      titulo: filtroTitulo.value,
-      autor: filtroAutor.value,
-      ano: filtroAno.value,
-      avaliacaoMin: filtroAvaliacao.value
-    });
-  });
-
-  document.getElementById("formLivro").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  errosValidacao.classList.add("d-none");
-  errosValidacao.innerHTML = "";
-
-  const livro = {
-    titulo: titulo.value,
-    autor: autor.value,
-    paginas: parseInt(paginas.value),
-    avaliacao: parseFloat(avaliacao.value),
-    dataLeitura: dataLeitura.value
-  };
-
-  const livroId = document.getElementById("livroId").value;
-  const metodo = livroId ? "PUT" : "POST";
-  const url = livroId ? `${baseURL}/${livroId}` : baseURL;
-
-  try {
-    const res = await fetch(url, {
-      method: metodo,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(livro)
-    });
-
-    const resposta = await res.json();
-
-    if (!res.ok) {
-      if (resposta.erros) {
-        errosValidacao.innerHTML = resposta.erros.map(e => `<div>${e.msg}</div>`).join("");
-        errosValidacao.classList.remove("d-none");
-      } else {
-        alert("❌ Erro ao cadastrar/editar livro.");
-      }
-      return;
-    }
-
-    alert(livroId ? "✏️ Livro editado com sucesso!" : "✅ Livro cadastrado com sucesso!");
-    bootstrap.Modal.getInstance(document.getElementById("modalLivro")).hide();
-    e.target.reset();
-    document.getElementById("livroId").value = ""; // limpa o campo oculto após edição
-    fetchLivros();
-
-  } catch (error) {
-    alert("❌ Erro inesperado.");
-    console.error(error);
-  }
-});
-
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb:public/index.html
   window.editarLivro = async (id) => {
     const res = await fetch(`${baseURL}/${id}`, { headers: authHeaders });
     const livro = await res.json();

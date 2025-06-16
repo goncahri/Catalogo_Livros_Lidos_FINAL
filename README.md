@@ -1,11 +1,7 @@
 
 # 📚 Catálogo de Livros - API com MongoDB
 
-<<<<<<< HEAD
 Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **Node.js**, **Express** e **MongoDB** como banco de dados. Permite **cadastrar, editar, excluir e listar livros**, com recursos de **filtros**, **ordenação**, **paginação**, **validações**, **autenticação via JWT** e **documentação automática com Swagger**.
-=======
-Este projeto é uma aplicação web com **API RESTful** para o gerenciamento dos seus livros lidos, você amante da leitura. Desenvolvido com **Node.js**, **Express** e **MongoDB**, o sistema permite **cadastrar**, **listar**, **editar** e **excluir** livros, oferecendo funcionalidades adicionais como **filtros** por título, autor, ano de leitura, ordenação por avaliação e paginação de resultados. Ideal para quem deseja acompanhar suas leituras de forma organizada e visual.
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 
 ---
 
@@ -16,16 +12,10 @@ Este projeto é uma aplicação web com **API RESTful** para o gerenciamento dos
 - [📂 Estrutura do Projeto](#-estrutura-do-projeto)
 - [🔐 Autenticação JWT](#-autenticação-jwt)
 - [🔌 Endpoints da API](#-endpoints-da-api)
-<<<<<<< HEAD
 - [🧪 Testes](#-testes)
 - [📃 Documentação Swagger](#-documentação-swagger)
 - [💾 Exemplo de livro](#-exemplo-de-livro)
 - [🔥 Scripts Disponíveis](#-scripts-disponíveis)
-=======
-- [📜 Scripts](#-scripts)
-- [💾 Exemplo de livro para cadastro](#-exemplo-de-livro-para-cadastro)
-- [☁️ Deploy no Vercel](#️-deploy-no-vercel)
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 - [🖥️ Demo](#️-demo)
 - [🤝 Contribuição](#-contribuição)
 - [📝 Licença](#-licença)
@@ -46,14 +36,8 @@ Este projeto é uma aplicação web com **API RESTful** para o gerenciamento dos
 ### 1️⃣ Clone o repositório
 
 ```bash
-<<<<<<< HEAD
 git clone https://github.com/seu-usuario/catalogo-livros.git
 cd catalogo-livros
-=======
-git clone https://github.com/goncahri/Catalogo_Livros_Lidos
-cd Catalogo_Livros_Lidos
-
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 ```
 
 ### 2️⃣ Instale as dependências
@@ -67,11 +51,6 @@ npm install
 Crie um arquivo `.env` na raiz seguindo o modelo abaixo:
 
 ```env
-<<<<<<< HEAD
-=======
-MONGO_URI=mongodb://localhost:27017/catalogo-livros
-DB_NAME=livrosdb
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 PORT=3000
 MONGO_URI=sua_uri_mongodb
 DB_NAME=livrosdb
@@ -89,7 +68,6 @@ SENHA_USUARIO=senha-do-usuario-de-teste
 ```
 .
 ├── api/
-<<<<<<< HEAD
 │   ├── config/           # Configurações (banco de dados)
 │   ├── controllers/      # Regras de negócio (CRUD, autenticação)
 │   ├── middleware/       # Middlewares (validação, auth)
@@ -120,21 +98,6 @@ Exemplo de header:
 
 ```http
 Authorization: Bearer seu_token_jwt
-=======
-│   ├── config/           # Conexão com MongoDB
-│   ├── controllers/      # Lógica das requisições (CRUD)
-│   ├── http/             # Requisições REST para teste no VS Code (REST Client / Thunder Client, etc)
-│   ├── middleware/       # Validações com express-validator
-│   ├── routes/           # Rotas da API
-│   └── index.js          # Entrada principal da API
-├── public/
-│   └── images/           # Imagens dos livros (caso existam)
-│   └── index.html        # Front-end
-├── vercel.json           # Configuração para deploy (se for hospedar no vercel)
-├── .env                  # Variáveis de ambiente (.gitignore)
-├── package.json
-└── README.md
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 ```
 
 ---
@@ -307,11 +270,7 @@ No painel da Vercel, adicione em **Settings > Environment Variables**:
 
 Você pode acessar o projeto funcionando em:
 
-<<<<<<< HEAD
 [https://seu-projeto.vercel.app](https://seu-projeto.vercel.app)
-=======
-https://front-catalogo-livros-lidos.vercel.app/ 
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 
 ---
 
@@ -337,10 +296,6 @@ Este projeto está licenciado sob a licença **MIT**.
 ### *Herivelton Henrique Gonçalves*
 ### *Gabriel Ribeiro Correa*
 ### *Breno Jose da Silva*
-<<<<<<< HEAD
 ### *Wendel Augusto Lopes Vasco*
 
 
-=======
-### *Wendel Augusto Lopes Vasco*
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb

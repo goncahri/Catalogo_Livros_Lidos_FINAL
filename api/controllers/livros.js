@@ -68,21 +68,13 @@ export const getLivroById = async (req, res) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
-<<<<<<< HEAD
     return res.status(400).json({ error: "ID inválido." });
-=======
-    return res.status(400).json({ error: true, message: "ID inválido" });
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
   }
 
   try {
     const livro = await db.collection("livros").findOne({ _id: new ObjectId(id) });
     if (!livro) {
-<<<<<<< HEAD
       return res.status(404).json({ error: "Livro não encontrado." });
-=======
-      return res.status(404).json({ error: true, message: "Livro não encontrado" });
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
     }
     res.json(livro);
   } catch (error) {
@@ -94,7 +86,6 @@ export const getLivroById = async (req, res) => {
 // POST
 export const createLivro = async (req, res) => {
   const db = req.app.locals.db;
-<<<<<<< HEAD
   const { titulo, autor, paginas, avaliacao, dataLeitura, opiniao } = req.body;
 
   if (
@@ -102,11 +93,6 @@ export const createLivro = async (req, res) => {
     avaliacao === undefined || avaliacao === null ||
     !dataLeitura
   ) {
-=======
-  const { titulo, autor, paginas, avaliacao, dataLeitura } = req.body;
-
-  if (!titulo || !autor || !paginas || !avaliacao || !dataLeitura) {
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
     return res.status(400).json({ error: true, message: "Todos os campos são obrigatórios." });
   }
 
@@ -124,11 +110,7 @@ export const createLivro = async (req, res) => {
 
   try {
     const result = await db.collection("livros").insertOne(novoLivro);
-<<<<<<< HEAD
     res.status(201).json({ insertedId: result.insertedId });
-=======
-    res.status(201).json({ _id: result.insertedId, ...novoLivro });
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
   } catch (error) {
     console.error("❌ Erro ao cadastrar livro:", error);
     res.status(500).json({ error: true, message: "Erro ao cadastrar livro" });
@@ -139,16 +121,12 @@ export const createLivro = async (req, res) => {
 export const updateLivro = async (req, res) => {
   const db = req.app.locals.db;
   const { id } = req.params;
-<<<<<<< HEAD
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ error: "ID inválido." });
   }
 
   const { titulo, autor, paginas, avaliacao, dataLeitura, opiniao } = req.body;
-=======
-  const { titulo, autor, paginas, avaliacao, dataLeitura } = req.body;
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
 
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ error: true, message: "ID inválido" });
@@ -186,25 +164,12 @@ export const deleteLivro = async (req, res) => {
   const { id } = req.params;
 
   if (!ObjectId.isValid(id)) {
-<<<<<<< HEAD
     return res.status(400).json({ error: "ID inválido." });
-=======
-    return res.status(400).json({ error: true, message: "ID inválido" });
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
   }
 
   try {
     const result = await db.collection("livros").deleteOne({ _id: new ObjectId(id) });
-<<<<<<< HEAD
     res.json(result);
-=======
-
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ error: true, message: "Livro não encontrado" });
-    }
-
-    res.json({ message: "Livro removido com sucesso" });
->>>>>>> 52f406d6d33db186175d4e07b743ef8226baf4bb
   } catch (error) {
     console.error("❌ Erro ao excluir livro:", error);
     res.status(500).json({ error: true, message: "Erro ao excluir livro" });

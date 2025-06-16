@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "node api/index.js",
     "start": "node api/index.js",
-    "test": "jest",
-    "doc": "node swagger.js"
+    "test": "jest"
+    
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

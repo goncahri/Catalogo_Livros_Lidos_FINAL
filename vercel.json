@@ -1,21 +1,11 @@
 {
   "version": 2,
   "rewrites": [
-    {
-      "source": "/api-docs/(.*)",
-      "destination": "/api/index.js"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/api"
-    }
-  ],
-  "functions": {
-    "api/index.js": {
-      "includeFiles": "api/swagger.json"
-    }
-  }
+    { "source": "/api/(.*)", "destination": "/api" },
+    { "source": "/docs/(.*)", "destination": "/public/docs/$1" }
+  ]
 }
+
 
 
 

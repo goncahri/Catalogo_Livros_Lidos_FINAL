@@ -1,4 +1,4 @@
-const baseURL = window.location.hostname.includes("vercel.app")
+const baseURL = window.location.hostname.includes("front-catalogo-livros-lidos-final.vercel.app")
   ? "https://catalogo-livros-lidos-final.vercel.app/api"
   : "http://localhost:3000/api";
 

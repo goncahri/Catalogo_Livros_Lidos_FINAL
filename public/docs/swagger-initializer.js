@@ -1,6 +1,6 @@
 window.onload = function() {
   window.ui = SwaggerUIBundle({
-    url: "./swagger.json",  // <- Aqui puxa seu arquivo local na pasta /docs
+    url: "swagger.json", // Está na mesma pasta
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
@@ -13,4 +13,5 @@ window.onload = function() {
     layout: "StandaloneLayout"
   });
 };
+
 

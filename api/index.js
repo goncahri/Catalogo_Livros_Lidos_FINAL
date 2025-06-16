@@ -19,13 +19,16 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Swagger
+// Swagger UI local via swagger-ui-express
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Arquivos estáticos
 app.use("/images", express.static("public/images"));
 
-// Rotas
+// Swagger UI estático para produção (Vercel)
+app.use("/docs", express.static("public/docs"));
+
+// Rotas principais
 app.use("/api/livros", livrosRoutes);
 app.use("/api/usuarios", usuariosRoutes);
 
@@ -34,7 +37,15 @@ app.get("/", (req, res) => {
   res.send("📚 API de Livros rodando com sucesso!");
 });
 
-// Conexão com banco
-await connectToDatabase(app);
+// Conexão com banco e start do servidor
+async function startServer() {
+  await connectToDatabase(app);
+  app.listen(port, () => {
+    console.log(`🚀 Servidor rodando na porta ${port}`);
+  });
+}
+
+startServer();
 
 export default app;
+

@@ -341,7 +341,7 @@
   ? "http://localhost:3000/api"
   : "https://catalogo-livros-lidos-final.vercel.app/api";
 
-  const googleBooksURL = baseURL + "/busca/google";
+  const googleBooksURL = `${baseURL}/livros/busca/google`;
 
   const campos = {
     titulo: document.getElementById("titulo"),
@@ -582,9 +582,10 @@ const fetchLivros = async (filtros = {}) => {
       document.getElementById("detalheAvaliacao").innerText = livro.avaliacao;
       document.getElementById("detalheOpiniao").innerText = livro.opiniao || "Sem opinião.";
 
-      const gRes = await fetch(`${baseURL}/busca/google/${encodeURIComponent(livro.titulo)}`, {
-        headers: authHeaders
-      });
+      const gRes = await fetch(`${baseURL}/livros/busca/google/${encodeURIComponent(livro.titulo)}`, {
+      headers: authHeaders
+    });
+
       const gData = await gRes.json();
 
       document.getElementById("detalheImagem").src = gData.thumbnail || "images/default-cover.png";

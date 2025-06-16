@@ -35,23 +35,15 @@ app.get("/", (req, res) => {
   res.send("📚 API de Livros rodando com sucesso!");
 });
 
-// Conexão com o banco
-connectToDatabase(app);
-
-// 🚀 Executa localmente (ignora em produção e em testes)
+// Conexão com o banco (apenas local ou testes)
 if (process.env.NODE_ENV !== "production" && !process.env.JEST_WORKER_ID) {
-  app.listen(port, () => {
-    console.log(`🚀 Servidor rodando na porta ${port}`);
+  connectToDatabase(app).then(() => {
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+    });
   });
 }
 
-// 🧪 Exporta para testes e Vercel
-const handler = async (req, res) => {
-  if (!app.locals.db) {
-    await connectToDatabase(app);
-  }
-  return app(req, res);
-};
-
-export { handler };
+// Exporta para testes e serverless
+export { app as handler };
 export default app;

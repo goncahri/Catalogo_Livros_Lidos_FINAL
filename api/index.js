@@ -22,7 +22,7 @@ app.use(express.json());
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Arquivos estáticos (se necessário)
+// Arquivos estáticos
 app.use("/images", express.static("public/images"));
 app.use(express.static("public"));
 
@@ -35,24 +35,15 @@ app.get("/", (req, res) => {
   res.send("📚 API de Livros rodando com sucesso!");
 });
 
-// Conexão com o banco
-async function startServer() {
-  await connectToDatabase(app);
-}
+// Conexão com banco
+connectToDatabase(app);
 
 // Executa localmente
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-  startServer().then(() => {
-    app.listen(port, () => {
-      console.log(`🚀 Servidor rodando na porta ${port}`);
-    });
+  app.listen(port, () => {
+    console.log(`🚀 Servidor rodando na porta ${port}`);
   });
 }
 
-// Handler para Vercel (serverless)
-export default async function handler(req, res) {
-  if (!app.locals.db) {
-    await startServer();
-  }
-  app(req, res);
-}
+// Exporta para Vercel
+export default app;

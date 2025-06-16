@@ -35,19 +35,16 @@ app.get("/", (req, res) => {
 });
 
 // Banco
-async function startServer() {
-  if (!app.locals.db) {
-    await connectToDatabase(app);
-  }
-}
-startServer();
-
-// Executa localmente (modo dev)
-if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-  app.listen(port, () => {
-    console.log(`🚀 Servidor rodando na porta ${port}`);
+connectToDatabase(app)
+  .then(() => {
+    if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+      app.listen(port, () => {
+        console.log(`🚀 Servidor rodando na porta ${port}`);
+      });
+    }
+  })
+  .catch((error) => {
+    console.error("❌ Erro ao conectar no MongoDB:", error);
   });
-}
 
-// Exporta para Vercel
 export default app;

@@ -19,13 +19,13 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Swagger UI local via swagger-ui-express
+// Swagger UI local
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Arquivos estáticos
 app.use("/images", express.static("public/images"));
 
-// Swagger UI estático para produção (Vercel)
+// Swagger UI estático para produção
 app.use("/docs", express.static("public/docs"));
 
 // Rotas principais
@@ -37,15 +37,24 @@ app.get("/", (req, res) => {
   res.send("📚 API de Livros rodando com sucesso!");
 });
 
-// Conexão com banco e start do servidor
+// Conexão com banco
 async function startServer() {
-  await connectToDatabase(app);
-  app.listen(port, () => {
-    console.log(`🚀 Servidor rodando na porta ${port}`);
+  if (!app.locals.db) {
+    await connectToDatabase(app);
+  }
+}
+
+// 🚀 Execução local
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  startServer().then(() => {
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+    });
   });
 }
 
-startServer();
-
-export default app;
-
+// ⚙️ Handler para Vercel
+export default async function handler(req, res) {
+  await startServer();
+  return app(req, res);
+}

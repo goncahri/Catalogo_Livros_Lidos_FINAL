@@ -24,7 +24,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 // Arquivos estáticos
 app.use("/images", express.static("public/images"));
-app.use(express.static("public"));
 
 // Rotas
 app.use("/api/livros", livrosRoutes);
@@ -36,14 +35,24 @@ app.get("/", (req, res) => {
 });
 
 // Conexão com banco
-connectToDatabase(app);
+async function startServer() {
+  if (!app.locals.db) {
+    await connectToDatabase(app);
+  }
+}
 
 // Executa localmente
 if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-  app.listen(port, () => {
-    console.log(`🚀 Servidor rodando na porta ${port}`);
+  startServer().then(() => {
+    app.listen(port, () => {
+      console.log(`🚀 Servidor rodando na porta ${port}`);
+    });
   });
 }
 
-// Exporta para Vercel
-export default app;
+// Handler para Vercel
+export default async function handler(req, res) {
+  await startServer();
+  app(req, res);
+}
+

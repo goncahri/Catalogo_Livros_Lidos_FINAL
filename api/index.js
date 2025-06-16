@@ -34,17 +34,7 @@ app.get("/", (req, res) => {
   res.send("📚 API de Livros rodando com sucesso!");
 });
 
-// Banco
-connectToDatabase(app)
-  .then(() => {
-    if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-      app.listen(port, () => {
-        console.log(`🚀 Servidor rodando na porta ${port}`);
-      });
-    }
-  })
-  .catch((error) => {
-    console.error("❌ Erro ao conectar no MongoDB:", error);
-  });
+// Conexão com banco
+await connectToDatabase(app);
 
 export default app;

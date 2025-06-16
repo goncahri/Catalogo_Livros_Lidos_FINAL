@@ -38,25 +38,20 @@ app.get("/", (req, res) => {
 // Conexão com o banco
 connectToDatabase(app);
 
-// Exporta para testes
-export default app;
-if (process.env.JEST_WORKER_ID) {
-  module.exports = app;
-}
-
-// Executa localmente (ignora em produção e em testes)
+// 🚀 Executa localmente (ignora em produção e em testes)
 if (process.env.NODE_ENV !== "production" && !process.env.JEST_WORKER_ID) {
   app.listen(port, () => {
     console.log(`🚀 Servidor rodando na porta ${port}`);
   });
 }
 
-// Vercel (serverless)
-export default async function handler(req, res) {
+// 🧪 Exporta para testes e Vercel
+const handler = async (req, res) => {
   if (!app.locals.db) {
     await connectToDatabase(app);
   }
+  return app(req, res);
+};
 
-  // Aplica manualmente o CORS no modo serverless
-  return corsMiddleware(req, res, () => app(req, res));
-}
+export { handler };
+export default app;

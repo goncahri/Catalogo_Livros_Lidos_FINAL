@@ -7,7 +7,12 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api"
+      "url": "http://localhost:3000/api",
+      "description": "Servidor Local"
+    },
+    {
+      "url": "https://catalogo-livros-lidos-final.vercel.app/api",
+      "description": "Servidor Produção"
     }
   ],
   "tags": [
@@ -33,7 +38,7 @@
                 "type": "object",
                 "properties": {
                   "nome": { "type": "string", "example": "Usuário Teste" },
-                  "email": { "type": "string", "example": "usuario2@teste.com.br" },
+                  "email": { "type": "string", "example": "usuario@teste.com.br" },
                   "senha": { "type": "string", "example": "Abc123!" }
                 },
                 "required": ["nome", "email", "senha"]
@@ -129,10 +134,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "684f191777c45c8bc0af18f4"
-            }
+            "schema": { "type": "string", "example": "684f191777c45c8bc0af18f4" }
           }
         ],
         "responses": {
@@ -148,10 +150,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "684f288aa685f6c84c1ad971"
-            }
+            "schema": { "type": "string", "example": "684f191777c45c8bc0af18f4" }
           }
         ],
         "requestBody": {
@@ -185,10 +184,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": {
-              "type": "string",
-              "example": "684f191777c45c8bc0af18f4"
-            }
+            "schema": { "type": "string", "example": "684f191777c45c8bc0af18f4" }
           }
         ],
         "responses": {

@@ -234,7 +234,7 @@
       <li>🌐 Conectado a banco de dados MongoDB.</li>
     </ul>
     <p>
-      <a href="https://front-catalogo-livros-lidos.vercel.app/api-docs" target="_blank" class="btn btn-outline-info">
+      <a href="/api-docs" target="_blank" class="btn btn-outline-info">
         🔍 Acessar Documentação Swagger
       </a>
     </p>
@@ -337,9 +337,7 @@
     });
   }
 
-  const baseURL = window.location.hostname.includes("vercel.app")
-    ? "https://back-catalogo-livros-lidos.vercel.app/api/livros"
-    : "http://localhost:3000/api/livros";
+  const baseURL = window.location.origin + "/api/livros";
 
   const googleBooksURL = baseURL + "/busca/google";
 

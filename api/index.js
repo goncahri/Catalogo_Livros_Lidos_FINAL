@@ -1,42 +1,52 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import swaggerUi from "swagger-ui-express";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const swaggerFile = require("./swagger.json");
+
 import { connectToDatabase } from "./config/db.js";
 import livrosRoutes from "./routes/livros.js";
+import usuariosRoutes from "./routes/usuarios.js";
 
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Serve imagens da pasta public/images
-app.use('/images', express.static('public/images'));
+// Documentação Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
-// Rotas
+// Arquivos estáticos (para imagens ou front-end)
+app.use("/images", express.static("public/images"));
+app.use(express.static("public"));
+
+// Rotas da API
 app.use("/api/livros", livrosRoutes);
+app.use("/api/usuarios", usuariosRoutes);
 
-app.get("/", (req, res) => res.send("📚 API de Livros"));
+// Rota raiz
+app.get("/", (req, res) => {
+  res.send("📚 API de Livros rodando com sucesso!");
+});
 
-// Conecta ao banco e inicia o app
-const start = async () => {
-  await connectToDatabase(app);
+// Conexão com o banco
+connectToDatabase(app);
 
-  // Se o arquivo estiver sendo executado diretamente (ex: node index.js), inicia o servidor
-  if (process.env.NODE_ENV !== "production") {
-    app.listen(port, () => {
-      console.log(`🚀 Servidor rodando na porta ${port}`);
-    });
-  }
-};
-
-start();
-
-// Exporta o app para funcionar na Vercel
-export default async function handler(req, res) {
-  await connectToDatabase(app);
-  app(req, res); // <- Isso permite que o Express atenda as requisições na Vercel
+// Exporta para testes
+export default app;
+if (process.env.JEST_WORKER_ID) {
+  module.exports = app;
 }
 
+// Executa localmente (ignora em produção e em testes)
+if (process.env.NODE_ENV !== "production" && !process.env.JEST_WORKER_ID) {
+  app.listen(port, () => {
+    console.log(`🚀 Servidor rodando na porta ${port}`);
+  });
+}
 

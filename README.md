@@ -1,6 +1,7 @@
+
 # 📚 Catálogo de Livros - API com MongoDB
 
-Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **Node.js**, **Express** e **MongoDB** como base de dados. Permite **cadastrar, editar, excluir e listar livros**, com recursos de **filtro por ano**, **ordenação por avaliação**, **paginação** e destaque de livros.
+Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **Node.js**, **Express** e **MongoDB** como banco de dados. Permite **cadastrar, editar, excluir e listar livros**, com recursos de **filtros**, **ordenação**, **paginação**, **validações**, **autenticação via JWT** e **documentação automática com Swagger**.
 
 ---
 
@@ -9,9 +10,12 @@ Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **No
 - [📦 Requisitos](#-requisitos)
 - [🚀 Instalação](#-instalação)
 - [📂 Estrutura do Projeto](#-estrutura-do-projeto)
+- [🔐 Autenticação JWT](#-autenticação-jwt)
 - [🔌 Endpoints da API](#-endpoints-da-api)
-- [📜 Scripts](#-scripts)
-- [💾 Exemplo de livro para cadastro](#-exemplo-de-livro-para-cadastro)
+- [🧪 Testes](#-testes)
+- [📃 Documentação Swagger](#-documentação-swagger)
+- [💾 Exemplo de livro](#-exemplo-de-livro)
+- [🔥 Scripts Disponíveis](#-scripts-disponíveis)
 - [🖥️ Demo](#️-demo)
 - [🤝 Contribuição](#-contribuição)
 - [📝 Licença](#-licença)
@@ -21,34 +25,40 @@ Este projeto é uma API RESTful para gerenciamento de livros lidos. Utiliza **No
 
 ## 📦 Requisitos
 
-- Node.js (v14 ou superior)
-- MongoDB local ou na nuvem (ex: MongoDB Atlas)
-- Ferramenta para testar requisições (Postman, Thunder Client, Insomnia etc.)
+- Node.js (versão 18 ou superior)
+- MongoDB (local ou na nuvem - MongoDB Atlas)
+- Ferramenta de testes de API (REST Client, Postman, Thunder Client, Insomnia, etc.)
 
 ---
 
 ## 🚀 Instalação
 
-### 1. Clone o repositório
+### 1️⃣ Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repo-catalogo-livros.git
-cd seu-repo-catalogo-livros
+git clone https://github.com/seu-usuario/catalogo-livros.git
+cd catalogo-livros
 ```
 
-### 2. Instale as dependências
+### 2️⃣ Instale as dependências
 
 ```bash
 npm install
 ```
 
-### 3. Configure o arquivo `.env`
+### 3️⃣ Configure o arquivo `.env`
 
-Crie um arquivo `.env` na raiz com o seguinte conteúdo:
+Crie um arquivo `.env` na raiz seguindo o modelo abaixo:
 
 ```env
-MONGO_URI=mongodb://localhost:27017/catalogo-livros
 PORT=3000
+MONGO_URI=sua_uri_mongodb
+DB_NAME=livrosdb
+SECRET_KEY=seu_secret_jwt
+EXPIRES_IN=24h
+
+# Usuário de teste
+SENHA_USUARIO=senha-do-usuario-de-teste
 ```
 
 ---
@@ -58,44 +68,121 @@ PORT=3000
 ```
 .
 ├── api/
-│   ├── config/           # Conexão com MongoDB
-│   ├── controllers/      # Lógica das requisições (CRUD)
-│   ├── middleware/       # Validações com express-validator
+│   ├── config/           # Configurações (banco de dados)
+│   ├── controllers/      # Regras de negócio (CRUD, autenticação)
+│   ├── middleware/       # Middlewares (validação, auth)
+│   ├── model/            # Modelos do MongoDB
 │   ├── routes/           # Rotas da API
-│   └── index.js          # Entrada principal da API
-├── public/
-│   └── images/           # Imagens dos livros (caso existam)
-├── index.html            # Front-end (opcional)
-├── vercel.json           # Configuração para deploy (opcional)
-├── .env                  # Variáveis de ambiente
-├── package.json
-└── README.md
+│   ├── public/           # Front-end (HTML, imagens)
+│   ├── swagger.json      # Documentação Swagger gerada
+│   └── index.js          # Arquivo principal
+├── __tests__/            # Testes automatizados (Jest + Supertest)
+├── .env-example          # Exemplo de configuração
+├── jest.config.js        # Configuração do Jest
+├── package.json          # Dependências e scripts
+├── vercel.json           # Deploy no Vercel
+└── README.md             # Documentação
+```
+
+---
+
+## 🔐 Autenticação JWT
+
+Para acessar os endpoints da API é necessário:
+
+- 🔑 Fazer login via `POST /api/usuarios/login`
+- Obter o token JWT (enviado na resposta)
+- Enviar esse token no header `Authorization` nas requisições protegidas.
+
+Exemplo de header:
+
+```http
+Authorization: Bearer seu_token_jwt
 ```
 
 ---
 
 ## 🔌 Endpoints da API
 
-- `GET /api/livros`: Lista paginada de livros com filtros (`titulo`, `autor`, `ano`, `avaliacaoMin`) e ordenação por `avaliacao`.
-- `GET /api/livros/:id`: Retorna um livro específico.
-- `POST /api/livros`: Cadastra um novo livro.
-- `PUT /api/livros/:id`: Atualiza um livro.
-- `DELETE /api/livros/:id`: Remove um livro.
+### 🔐 Rotas de Usuário
 
-> O filtro por **ano** busca dentro de `dataLeitura` (mesmo que esteja em formato `yyyy-mm-dd`).
+- `POST /api/usuarios/register` ➝ Cria um usuário
+- `POST /api/usuarios/login` ➝ Autentica e gera token
+
+### 📚 Rotas de Livros (Protegidas)
+
+- `GET /api/livros` ➝ Lista livros (com filtros, ordenação e paginação)
+- `GET /api/livros/:id` ➝ Busca livro por ID
+- `POST /api/livros` ➝ Cadastra novo livro
+- `PUT /api/livros/:id` ➝ Edita livro
+- `DELETE /api/livros/:id` ➝ Remove livro
+
+### 🌐 Documentação Swagger
+
+- `GET /api-docs` ➝ Acessa documentação interativa da API
 
 ---
 
-## 📜 Scripts
+## 🧪 Testes
 
-| Comando         | Ação                                     |
-|----------------|------------------------------------------|
-| `npm run dev`  | Inicia o servidor em modo de desenvolvimento |
-| `npm start`    | Inicia o servidor em modo de produção    |
+### ✅ Instalação dos pacotes de testes
+
+```bash
+npm install jest supertest -D
+```
+
+### ✅ Descrição dos pacotes:
+
+| Pacote       | Descrição                                                               |
+| ------------- | ------------------------------------------------------------------------ |
+| **Jest**      | Framework de testes em JavaScript para testes unitários e integração.  |
+| **SuperTest** | Faz requisições HTTP e testa respostas de APIs Node.js.                 |
+
+### ✅ Organização dos testes:
+
+- Crie a pasta `__tests__` na raiz.
+- Crie os arquivos de testes, exemplo: `api.test.js`.
+
+### ✅ Scripts no `package.json`:
+
+```json
+"scripts": {
+  "test": "jest"
+}
+```
+
+### ✅ Executar os testes:
+
+```bash
+npm run test
+```
 
 ---
 
-## 💾 Exemplo de livro para cadastro
+## 📃 Documentação Swagger
+
+### 🚀 Instale os pacotes:
+
+```bash
+npm install swagger-ui-express
+npm install swagger-autogen -D
+```
+
+### 🔗 Acesso à documentação interativa:
+
+```
+http://localhost:3000/api-docs
+```
+
+Ou no Vercel:
+
+```
+https://seu-projeto.vercel.app/api-docs
+```
+
+---
+
+## 💾 Exemplo de livro
 
 ```json
 {
@@ -109,30 +196,46 @@ PORT=3000
 
 ---
 
+## 🔥 Scripts Disponíveis
+
+| Comando        | Descrição                                     |
+|----------------|-----------------------------------------------|
+| `npm run dev`  | Inicia o servidor em modo desenvolvimento    |
+| `npm start`    | Inicia o servidor em modo produção           |
+| `npm run test` | Executa os testes automáticos                |
+
+---
+
 ## 🖥️ Demo
 
-Você pode testar a API online acessando:
+Você pode acessar o projeto funcionando em:
 
-[https://seu-link-no-vercel.vercel.app](https://seu-link-no-vercel.vercel.app)  
+[https://seu-projeto.vercel.app](https://seu-projeto.vercel.app)
 
 ---
 
 ## 🤝 Contribuição
 
-Contribuições são bem-vindas! Abra uma issue ou envie um pull request com melhorias ou correções.
+Contribuições são bem-vindas! 
+
+- Abra uma issue com melhorias, correções ou dúvidas.
+- Envie um pull request.
 
 ---
 
 ## 📝 Licença
 
-MIT
+Este projeto está licenciado sob a licença **MIT**.
 
 ---
 
 ## 👤 Autor
 
 ### Grupo Wi (World Innovation):
+
 ### *Herivelton Henrique Gonçalves*
-### *Gabriel*
-### *Breno*
-### *Wendel*
+### *Gabriel Ribeiro Correa*
+### *Breno Jose da Silva*
+### *Wendel Augusto Lopes Vasco*
+
+

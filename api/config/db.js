@@ -1,9 +1,13 @@
-// api/config/db.js
 import { MongoClient } from "mongodb";
 
 let db;
 
 export async function connectToDatabase(app) {
+  if (db) {
+    app.locals.db = db;
+    return;
+  }
+
   try {
     const client = new MongoClient(process.env.MONGO_URI);
     await client.connect();
